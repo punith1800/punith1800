@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>punith1800 · Developer Profile</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+  :root{
+    --canvas:#0d1117;
+    --surface:#161b22;
+    --surface-2:#1c2129;
+    --border:#30363d;
+    --border-soft:#21262d;
+    --text:#e6edf3;
+    --text-muted:#8b949e;
+    --link:#4493f8;
+    --accent-orange:#f78166;
+    --g0:#0e4429;
+    --g1:#006d32;
+    --g2:#26a641;
+    --g3:#39d353;
+    --g4:#56f89a;
+  }
+  *{box-sizing:border-box;}
+  html,body{background:var(--canvas); color:var(--text); font-family:'Inter',ui-sans-serif,system-ui,sans-serif;}
+  .mono{font-family:'JetBrains Mono', ui-monospace, monospace;}
+  ::selection{background:#1f6feb55;}
+  a{color:var(--link);}
+  .card{background:var(--surface); border:1px solid var(--border);}
+  .card-2{background:var(--surface-2); border:1px solid var(--border-soft);}
+  .btn{
+    background:var(--surface-2); border:1px solid var(--border); color:var(--text);
+    transition:background .12s ease, border-color .12s ease;
+  }
+  .btn:hover{background:#262c36; border-color:#8b949e;}
+  .btn-primary{ background:#238636; border:1px solid rgba(240,246,252,.1); color:#fff; }
+  .btn-primary:hover{ background:#2ea043; }
+  .btn-following{ background:#21262d; border:1px solid var(--border); color:var(--text); }
+
+  .tab{
+    color:var(--text-muted); border-bottom:2px solid transparent; font-weight:500;
+  }
+  .tab.active{ color:var(--text); border-bottom-color:var(--accent-orange); }
+  .tab:hover:not(.active){ color:var(--text); border-bottom-color:#484f58; }
+
+  .lang-dot{width:10px;height:10px;border-radius:9999px;display:inline-block;}
+
+  /* contribution graph */
+  #contrib-grid{ display:grid; grid-auto-flow:column; grid-template-rows:repeat(7,11px); gap:3px; }
+  .day-cell{ width:11px; height:11px; border-radius:2px; }
+  .day-cell:hover{ outline:1px solid #f0f6fc80; outline-offset:0; }
+  #month-row{ display:grid; grid-auto-flow:column; gap:3px; }
+
+  .scrollbar-thin::-webkit-scrollbar{height:8px; width:8px;}
+  .scrollbar-thin::-webkit-scrollbar-thumb{background:#30363d; border-radius:4px;}
+  .scrollbar-thin::-webkit-scrollbar-track{background:transparent;}
+
+  .badge-ring{
+    width:34px;height:34px;border-radius:9999px;
+    display:flex;align-items:center;justify-content:center;
+    border:1px solid var(--border); background:var(--surface-2);
+  }
+
+  .tooltip{
+    position:absolute; z-index:50; background:#1c2129; color:#e6edf3; border:1px solid #30363d;
+    padding:6px 9px; border-radius:6px; font-size:12px; white-space:nowrap; pointer-events:none;
+    box-shadow:0 8px 24px rgba(1,4,9,.6); transform:translate(-50%,-130%); opacity:0; transition:opacity .08s ease;
+  }
+</style>
+</head>
+<body class="min-h-screen">
+
+<!-- Top bar -->
+<header class="border-b" style="border-color:var(--border-soft); background:var(--canvas);">
+  <div class="max-w-6xl mx-auto flex items-center justify-between px-4 py-3">
+    <div class="flex items-center gap-3">
+      <div class="w-7 h-7 rounded-md" style="background:linear-gradient(135deg,#39d353,#1f6feb);"></div>
+      <span class="font-semibold tracking-tight text-[15px]">devfolio</span>
+    </div>
+    <div class="hidden sm:flex items-center gap-1 mono text-xs px-3 py-1.5 rounded-md card text-[var(--text-muted)] w-72">
+      <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><path d="M15.7 13.3l-3.81-3.81A5.93 5.93 0 0013 6a6 6 0 10-6 6 5.93 5.93 0 003.49-1.11l3.81 3.81a1 1 0 001.4-1.4zM3 6a3 3 0 116 0 3 3 0 01-6 0z"></path></svg>
+      <span>Search</span>
+    </div>
+    <div class="flex items-center gap-3 text-sm">
+      <a href="#" class="hidden sm:inline text-[var(--text-muted)] hover:text-white">Docs</a>
+      <div class="w-8 h-8 rounded-full" style="background:linear-gradient(135deg,#f78166,#a371f7);"></div>
+    </div>
+  </div>
+</header>
+
+<div class="max-w-6xl mx-auto px-4 py-8 grid grid-cols-1 lg:grid-cols-[296px_1fr] gap-8">
+
+  <!-- ============ SIDEBAR ============ -->
+  <aside>
+    <div id="avatar-container" class="w-full aspect-square max-w-[260px] rounded-full overflow-hidden border" style="border-color:var(--border);">
+      <svg viewBox="0 0 100 100" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="av" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stop-color="#39d353"/>
+            <stop offset="55%" stop-color="#1f6feb"/>
+            <stop offset="100%" stop-color="#a371f7"/>
+          </linearGradient>
+        </defs>
+        <rect width="100" height="100" fill="#0d1117"/>
+        <g id="avatar-cells"></g>
+      </svg>
+    </div>
+
+    <h1 id="profile-name" class="mt-4 text-2xl font-bold leading-tight">punith1800</h1>
+    <p id="profile-username" class="text-[var(--text-muted)] text-lg leading-none mt-0.5">punith1800</p>
+
+    <p id="profile-bio" class="mt-4 text-[15px] leading-relaxed">
+      Backend-leaning full-stack engineer. I build developer tools, distributed
+      systems, and the occasional over-engineered CLI. Coffee-powered.
+    </p>
+
+    <a id="follow-btn" href="https://github.com/punith1800" target="_blank" rel="noopener" class="btn-primary w-full mt-4 py-1.5 rounded-md text-sm font-medium block text-center">Follow on GitHub</a>
+
+    <div class="flex items-center gap-4 mt-4 text-sm text-[var(--text-muted)]">
+      <a id="followers-link" href="#" target="_blank" rel="noopener" class="hover:underline"><strong id="followers-count" class="text-[var(--text)]">–</strong> followers</a>
+      <span class="mono">·</span>
+      <a id="following-link" href="#" target="_blank" rel="noopener" class="hover:underline"><strong id="following-count" class="text-[var(--text)]">–</strong> following</a>
+    </div>
+
+    <p id="fetch-status" class="text-xs text-[var(--text-muted)] mt-2 hidden"></p>
+
+    <ul class="mt-4 space-y-2 text-sm text-[var(--text-muted)]">
+      <li id="profile-location-row" class="flex items-center gap-2 hidden">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0a6 6 0 00-6 6c0 4.2 6 10 6 10s6-5.8 6-10a6 6 0 00-6-6zm0 8.5A2.5 2.5 0 118 3.5a2.5 2.5 0 010 5z"/></svg>
+        <span id="profile-location"></span>
+      </li>
+      <li id="profile-company-row" class="flex items-center gap-2 hidden">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M2 3a1 1 0 011-1h10a1 1 0 011 1v10a1 1 0 01-1 1H3a1 1 0 01-1-1V3zm2 2v6h8V5H4z"/></svg>
+        <span id="profile-company"></span>
+      </li>
+      <li id="profile-blog-row" class="flex items-center gap-2 hidden">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M1 4a2 2 0 012-2h10a2 2 0 012 2v8a2 2 0 01-2 2H3a2 2 0 01-2-2V4zm2-.2V4l6 4 6-4v-.2L9 7 3 3.8z"/></svg>
+        <a id="profile-blog" href="#" target="_blank" rel="noopener" class="hover:underline"></a>
+      </li>
+      <li id="profile-twitter-row" class="flex items-center gap-2 hidden">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M18.9 1.2h3.7l-8.1 9.3L24 22.8h-7.5l-5.9-7.7-6.7 7.7H0l8.6-9.9L0 1.2h7.7l5.4 7.1 5.8-7.1z" transform="scale(0.6)"/></svg>
+        <a id="profile-twitter" href="#" target="_blank" rel="noopener" class="hover:underline"></a>
+      </li>
+      <li class="flex items-center gap-2">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M2 2.5A1.5 1.5 0 013.5 1h5.086a1.5 1.5 0 011.06.44l3.914 3.914a1.5 1.5 0 01.44 1.06V13.5A1.5 1.5 0 0112.5 15h-9A1.5 1.5 0 012 13.5v-11z"/></svg>
+        <a id="profile-github-link" href="https://github.com/punith1800" target="_blank" rel="noopener" class="hover:underline">github.com/punith1800</a>
+      </li>
+    </ul>
+
+    <hr class="my-4" style="border-color:var(--border-soft);">
+
+    <div>
+      <p class="text-sm font-semibold mb-2">Achievements</p>
+      <div class="flex flex-wrap gap-2">
+        <div class="badge-ring" title="Pull Shark">🦈</div>
+        <div class="badge-ring" title="Arctic Code Vault">🧊</div>
+        <div class="badge-ring" title="YOLO Merger">⚡</div>
+        <div class="badge-ring" title="Galaxy Brain">🧠</div>
+        <div class="badge-ring" title="Starstruck">⭐</div>
+      </div>
+    </div>
+
+    <hr class="my-4" style="border-color:var(--border-soft);">
+
+    <div>
+      <p class="text-sm font-semibold mb-2">Organizations</p>
+      <div class="flex gap-2">
+        <div class="w-9 h-9 rounded-md" style="background:linear-gradient(135deg,#1f6feb,#39d353);" title="OpenForge"></div>
+        <div class="w-9 h-9 rounded-md" style="background:linear-gradient(135deg,#a371f7,#f78166);" title="ByteWorks"></div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ============ MAIN ============ -->
+  <main class="min-w-0">
+    <!-- Tabs -->
+    <nav class="flex items-center gap-6 border-b overflow-x-auto scrollbar-thin" style="border-color:var(--border-soft);">
+      <button data-tab="overview" class="tab active px-1 pb-3 text-sm whitespace-nowrap">Overview</button>
+      <button data-tab="repositories" class="tab px-1 pb-3 text-sm whitespace-nowrap">Repositories <span class="mono text-xs text-[var(--text-muted)]">24</span></button>
+      <button data-tab="projects" class="tab px-1 pb-3 text-sm whitespace-nowrap">Projects <span class="mono text-xs text-[var(--text-muted)]">6</span></button>
+      <button data-tab="contact" class="tab px-1 pb-3 text-sm whitespace-nowrap">Contact</button>
+    </nav>
+
+    <!-- ===== OVERVIEW TAB ===== -->
+    <section id="tab-overview" class="tab-panel mt-6">
+      <div class="flex items-center justify-between">
+        <h2 id="pinned-heading" class="text-sm font-semibold text-[var(--text-muted)] uppercase-none">Pinned</h2>
+        <a href="https://github.com/punith1800?tab=repositories" target="_blank" rel="noopener" class="text-xs text-[var(--link)] hover:underline">View all on GitHub</a>
+      </div>
+
+      <div id="pinned-grid" class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-3"></div>
+
+      <div class="mt-8">
+        <div class="flex items-baseline justify-between flex-wrap gap-2">
+          <p class="text-sm"><strong id="contrib-total" class="font-semibold"></strong> contributions in the last year</p>
+          <div class="flex items-center gap-1 text-xs text-[var(--text-muted)]">
+            <span>Less</span>
+            <span class="day-cell" style="background:#161b22;border:1px solid var(--border-soft);"></span>
+            <span class="day-cell" style="background:var(--g0);"></span>
+            <span class="day-cell" style="background:var(--g1);"></span>
+            <span class="day-cell" style="background:var(--g2);"></span>
+            <span class="day-cell" style="background:var(--g3);"></span>
+            <span class="day-cell" style="background:var(--g4);"></span>
+            <span>More</span>
+          </div>
+        </div>
+
+        <div class="card rounded-md mt-3 p-4 overflow-x-auto scrollbar-thin relative">
+          <div id="graph-wrapper" class="inline-block relative">
+            <div id="month-row" class="text-xs text-[var(--text-muted)] mb-1 ml-6"></div>
+            <div class="flex gap-1">
+              <div id="day-labels" class="flex flex-col justify-between text-xs text-[var(--text-muted)] mono pr-1" style="height:88px;">
+                <span></span><span>Mon</span><span></span><span>Wed</span><span></span><span>Fri</span><span></span>
+              </div>
+              <div id="contrib-grid"></div>
+            </div>
+          </div>
+          <div id="tooltip" class="tooltip"></div>
+        </div>
+        <p id="contrib-note" class="text-xs text-[var(--text-muted)] mt-2">Loading contribution data…</p>
+      </div>
+
+      <div class="mt-8">
+        <h2 class="text-sm font-semibold text-[var(--text-muted)]">Currently building</h2>
+        <div class="card rounded-md mt-3 p-4 flex items-start gap-3">
+          <div class="lang-dot mt-1" style="background:#39d353;"></div>
+          <div>
+            <p class="text-sm"><strong>queue-forge</strong> — a lightweight, embeddable job queue for edge runtimes, written in Rust with a JS binding layer.</p>
+            <p class="text-xs text-[var(--text-muted)] mt-1">Last commit 2 hours ago on <span class="mono">main</span></p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== REPOSITORIES TAB ===== -->
+    <section id="tab-repositories" class="tab-panel mt-6 hidden">
+      <div class="flex items-center gap-2 mb-4">
+        <input type="text" placeholder="Find a repository…" class="card rounded-md px-3 py-1.5 text-sm flex-1 outline-none focus:border-[var(--link)]" style="background:var(--surface);">
+        <button class="btn rounded-md px-3 py-1.5 text-sm">Type</button>
+        <button class="btn rounded-md px-3 py-1.5 text-sm">Language</button>
+        <button class="btn-primary rounded-md px-3 py-1.5 text-sm font-medium">New</button>
+      </div>
+      <div id="repo-list" class="divide-y" style="border-top:1px solid var(--border-soft); border-color:var(--border-soft);"></div>
+    </section>
+
+    <!-- ===== PROJECTS TAB ===== -->
+    <section id="tab-projects" class="tab-panel mt-6 hidden">
+      <div id="project-grid" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
+    </section>
+
+    <!-- ===== CONTACT TAB ===== -->
+    <section id="tab-contact" class="tab-panel mt-6 hidden">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div class="card rounded-md p-5">
+          <h3 class="font-semibold mb-1">Send a message</h3>
+          <p class="text-sm text-[var(--text-muted)] mb-4">I usually reply within a day or two.</p>
+          <form class="space-y-3" onsubmit="event.preventDefault(); document.getElementById('contact-sent').classList.remove('hidden');">
+            <div>
+              <label class="text-xs text-[var(--text-muted)]">Name</label>
+              <input required type="text" class="w-full mt-1 rounded-md px-3 py-2 text-sm outline-none card focus:border-[var(--link)]">
+            </div>
+            <div>
+              <label class="text-xs text-[var(--text-muted)]">Email</label>
+              <input required type="email" class="w-full mt-1 rounded-md px-3 py-2 text-sm outline-none card focus:border-[var(--link)]">
+            </div>
+            <div>
+              <label class="text-xs text-[var(--text-muted)]">Message</label>
+              <textarea required rows="4" class="w-full mt-1 rounded-md px-3 py-2 text-sm outline-none card focus:border-[var(--link)]"></textarea>
+            </div>
+            <button type="submit" class="btn-primary rounded-md px-4 py-1.5 text-sm font-medium">Send message</button>
+            <p id="contact-sent" class="hidden text-xs text-[var(--g3)] mt-2">Message queued — thanks, I'll get back to you soon.</p>
+          </form>
+        </div>
+
+        <div class="card rounded-md p-5">
+          <h3 class="font-semibold mb-3">Elsewhere</h3>
+          <ul class="space-y-3 text-sm">
+            <li class="flex items-center justify-between">
+              <span class="text-[var(--text-muted)]">Email</span>
+              <a href="mailto:hello@punith1800.dev" class="hover:underline">hello@punith1800.dev</a>
+            </li>
+            <li class="flex items-center justify-between">
+              <span class="text-[var(--text-muted)]">GitHub</span>
+              <a href="#" class="hover:underline">github.com/punith1800</a>
+            </li>
+            <li class="flex items-center justify-between">
+              <span class="text-[var(--text-muted)]">LinkedIn</span>
+              <a href="#" class="hover:underline">in/punith1800</a>
+            </li>
+            <li class="flex items-center justify-between">
+              <span class="text-[var(--text-muted)]">X / Twitter</span>
+              <a href="#" class="hover:underline">@arivera_dev</a>
+            </li>
+          </ul>
+          <hr class="my-4" style="border-color:var(--border-soft);">
+          <p class="text-xs text-[var(--text-muted)]">Based in Ahmedabad, India · usually online 10:00–20:00 IST</p>
+        </div>
+      </div>
+    </section>
+  </main>
+</div>
+
+<footer class="max-w-6xl mx-auto px-4 py-8 text-center text-xs text-[var(--text-muted)]">
+  Built with HTML, Tailwind CSS &amp; vanilla JS.
+</footer>
+
+<script>
+/* ---------- language color map ---------- */
+const LANG_COLORS = {
+  "TypeScript":"#3178c6","JavaScript":"#f1e05a","Rust":"#dea584","Go":"#00ADD8",
+  "Python":"#3572A5","C++":"#f34b7d","Shell":"#89e051","HTML":"#e34c26","CSS":"#563d7c"
+};
+function langDot(lang){ return `<span class="lang-dot" style="background:${LANG_COLORS[lang]||'#8b949e'}"></span>`; }
+
+/* ---------- GitHub account to connect ---------- */
+const GITHUB_USERNAME = 'punith1800'; // change this to switch accounts
+
+/* ---------- identicon-style fallback avatar (shown until the real one loads) ---------- */
+function renderFallbackAvatar(){
+  const g = document.getElementById('avatar-cells');
+  g.innerHTML = '';
+  const size = 5, cell = 100/size;
+  let seed = 42;
+  const rand = () => { seed = (seed*9301+49297)%233280; return seed/233280; };
+  for(let y=0;y<size;y++){
+    for(let x=0;x<Math.ceil(size/2);x++){
+      if(rand() > 0.5){
+        const rect1 = `<rect x="${x*cell}" y="${y*cell}" width="${cell}" height="${cell}" fill="url(#av)" opacity="${0.55+rand()*0.45}"/>`;
+        const mirrorX = size-1-x;
+        const rect2 = `<rect x="${mirrorX*cell}" y="${y*cell}" width="${cell}" height="${cell}" fill="url(#av)" opacity="${0.55+rand()*0.45}"/>`;
+        g.insertAdjacentHTML('beforeend', rect1+rect2);
+      }
+    }
+  }
+}
+renderFallbackAvatar();
+
+/* ---------- tab switching ---------- */
+const tabs = document.querySelectorAll('.tab');
+const panels = document.querySelectorAll('.tab-panel');
+tabs.forEach(tab=>{
+  tab.addEventListener('click', ()=>{
+    tabs.forEach(t=>t.classList.remove('active'));
+    tab.classList.add('active');
+    const target = tab.dataset.tab;
+    panels.forEach(p=> p.id === `tab-${target}` ? p.classList.remove('hidden') : p.classList.add('hidden'));
+  });
+});
+
+/* ---------- fallback data (used only if the live GitHub fetch fails) ---------- */
+const FALLBACK_PINNED = [
+  {name:"queue-forge", description:"A lightweight, embeddable job queue for edge runtimes, written in Rust with a JS binding layer.", language:"Rust", stargazers_count:842, forks_count:64, html_url:"#"},
+  {name:"pixel-cache", description:"An LRU-based image transformation cache for serverless environments with automatic invalidation.", language:"TypeScript", stargazers_count:1203, forks_count:118, html_url:"#"},
+  {name:"tinyorm", description:"A zero-dependency, type-safe query builder for SQLite and Postgres in under 6kb.", language:"TypeScript", stargazers_count:2091, forks_count:203, html_url:"#"},
+  {name:"shipwright-cli", description:"Opinionated scaffolding CLI for spinning up production-ready Go microservices in seconds.", language:"Go", stargazers_count:567, forks_count:41, html_url:"#"},
+];
+
+function timeAgo(dateStr){
+  const diffMs = Date.now() - new Date(dateStr).getTime();
+  const day = 86400000;
+  const days = Math.floor(diffMs/day);
+  if(days < 1) return 'today';
+  if(days === 1) return 'yesterday';
+  if(days < 30) return `${days} days ago`;
+  if(days < 365) return `${Math.floor(days/30)} months ago`;
+  return `${Math.floor(days/365)} years ago`;
+}
+
+function repoCardHTML(r){
+  return `
+    <div class="card rounded-md p-4 flex flex-col">
+      <div class="flex items-center gap-2 text-sm">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="#8b949e"><path d="M2 2.5A1.5 1.5 0 013.5 1h5.086a1.5 1.5 0 011.06.44l3.914 3.914a1.5 1.5 0 01.44 1.06V13.5A1.5 1.5 0 0112.5 15h-9A1.5 1.5 0 012 13.5v-11z"/></svg>
+        <a href="${r.html_url}" target="_blank" rel="noopener" class="font-semibold text-[var(--link)] hover:underline">${r.name}</a>
+        <span class="text-xs px-2 py-0.5 rounded-full border" style="border-color:var(--border); color:var(--text-muted);">${r.private ? 'Private' : 'Public'}</span>
+      </div>
+      <p class="text-sm text-[var(--text-muted)] mt-2 flex-1">${r.description ? r.description : 'No description provided.'}</p>
+      <div class="flex items-center gap-4 mt-3 text-xs text-[var(--text-muted)]">
+        <span class="flex items-center gap-1">${r.language ? langDot(r.language) + ' ' + r.language : ''}</span>
+        <span class="flex items-center gap-1">
+          <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><path d="M8 .25l2.34 4.98 5.41.66-4 3.86.99 5.38L8 12.5l-4.74 2.63.99-5.38-4-3.86 5.41-.66z"/></svg>
+          ${r.stargazers_count.toLocaleString()}
+        </span>
+        <span class="flex items-center gap-1">
+          <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><path d="M5 3.25a1.25 1.25 0 112.5 0 1.25 1.25 0 01-2.5 0zM3.5 4.5A1.75 1.75 0 115 2.87v2.26h6V2.87a1.75 1.75 0 11.5 0v2.26a1.5 1.5 0 01-1.5 1.5H8.75v2.15a1.75 1.75 0 11-1.5 0V6.63H5.5a1.5 1.5 0 01-1.5-1.5V4.5zM7 12.63a1.25 1.25 0 102.5 0 1.25 1.25 0 00-2.5 0zM11.75 3.5A1.25 1.25 0 1011.75 1a1.25 1.25 0 000 2.5z"/></svg>
+          ${r.forks_count}
+        </span>
+      </div>
+    </div>`;
+}
+
+function renderPinned(repos){
+  document.getElementById('pinned-grid').innerHTML = repos.map(repoCardHTML).join('');
+}
+
+function renderRepoList(repos){
+  const repoList = document.getElementById('repo-list');
+  repoList.innerHTML = repos.map(r => `
+    <div class="py-4 flex items-start justify-between gap-4">
+      <div>
+        <a href="${r.html_url}" target="_blank" rel="noopener" class="font-semibold text-[var(--link)] hover:underline">${r.name}</a>
+        <p class="text-sm text-[var(--text-muted)] mt-1">${r.description ? r.description : 'No description provided.'}</p>
+        <div class="flex items-center gap-4 mt-2 text-xs text-[var(--text-muted)]">
+          <span class="flex items-center gap-1">${r.language ? langDot(r.language) + ' ' + r.language : ''}</span>
+          <span>★ ${r.stargazers_count.toLocaleString()}</span>
+          <span>Updated ${timeAgo(r.pushed_at || r.updated_at)}</span>
+        </div>
+      </div>
+      <a href="${r.html_url}" target="_blank" rel="noopener" class="btn rounded-md px-3 py-1 text-xs">View</a>
+    </div>`).join('');
+}
+
+/* ---------- live GitHub profile + repos ---------- */
+async function loadGitHubProfile(username){
+  const statusEl = document.getElementById('fetch-status');
+  try{
+    const res = await fetch(`https://api.github.com/users/${username}`);
+    if(!res.ok) throw new Error(res.status === 404 ? 'User not found' : `GitHub API error (${res.status})`);
+    const user = await res.json();
+
+    document.getElementById('profile-name').textContent = user.name || user.login;
+    document.getElementById('profile-username').textContent = user.login;
+    if(user.bio) document.getElementById('profile-bio').textContent = user.bio;
+    document.getElementById('followers-count').textContent = user.followers.toLocaleString();
+    document.getElementById('following-count').textContent = user.following.toLocaleString();
+    document.getElementById('followers-link').href = `${user.html_url}?tab=followers`;
+    document.getElementById('following-link').href = `${user.html_url}?tab=following`;
+    document.getElementById('follow-btn').href = user.html_url;
+    document.getElementById('profile-github-link').href = user.html_url;
+    document.getElementById('profile-github-link').textContent = `github.com/${user.login}`;
+
+    if(user.location){
+      document.getElementById('profile-location').textContent = user.location;
+      document.getElementById('profile-location-row').classList.remove('hidden');
+    }
+    if(user.company){
+      document.getElementById('profile-company').textContent = user.company;
+      document.getElementById('profile-company-row').classList.remove('hidden');
+    }
+    if(user.blog){
+      const url = user.blog.startsWith('http') ? user.blog : `https://${user.blog}`;
+      const blogEl = document.getElementById('profile-blog');
+      blogEl.href = url; blogEl.textContent = user.blog;
+      document.getElementById('profile-blog-row').classList.remove('hidden');
+    }
+    if(user.twitter_username){
+      const twEl = document.getElementById('profile-twitter');
+      twEl.href = `https://x.com/${user.twitter_username}`;
+      twEl.textContent = `@${user.twitter_username}`;
+      document.getElementById('profile-twitter-row').classList.remove('hidden');
+    }
+
+    // swap in the real avatar once it's loaded
+    const img = new Image();
+    img.onload = () => {
+      document.getElementById('avatar-container').innerHTML =
+        `<img src="${user.avatar_url}" alt="${user.login}" class="w-full h-full object-cover">`;
+    };
+    img.src = user.avatar_url;
+
+    return true;
+  } catch(err){
+    statusEl.textContent = `Couldn't load live GitHub data (${err.message}) — showing placeholder content instead.`;
+    statusEl.classList.remove('hidden');
+    return false;
+  }
+}
+
+async function loadGitHubRepos(username){
+  try{
+    const res = await fetch(`https://api.github.com/users/${username}/repos?per_page=100&sort=updated`);
+    if(!res.ok) throw new Error(`GitHub API error (${res.status})`);
+    const repos = await res.json();
+    if(!Array.isArray(repos) || repos.length === 0) throw new Error('No public repositories found');
+
+    document.getElementById('pinned-heading').textContent = 'Popular repositories';
+    const byStars = [...repos].sort((a,b)=> b.stargazers_count - a.stargazers_count).slice(0,4);
+    renderPinned(byStars);
+    renderRepoList(repos);
+    document.querySelector('[data-tab="repositories"]').innerHTML =
+      `Repositories <span class="mono text-xs text-[var(--text-muted)]">${repos.length}</span>`;
+    return true;
+  } catch(err){
+    renderPinned(FALLBACK_PINNED);
+    return false;
+  }
+}
+
+loadGitHubProfile(GITHUB_USERNAME);
+loadGitHubRepos(GITHUB_USERNAME);
+
+/* ---------- projects ---------- */
+const projects = [
+  {name:"Aperture", desc:"A self-hosted analytics dashboard with real-time event streaming and cohort tooling for indie SaaS teams.", tags:["Next.js","Postgres","WebSockets"], link:"#"},
+  {name:"Wren", desc:"A markdown-native note-taking app with bidirectional links and a local-first sync engine.", tags:["Rust","SQLite","Tauri"], link:"#"},
+  {name:"Latch", desc:"Passwordless auth-as-a-service with WebAuthn support, built for small teams shipping fast.", tags:["Go","Redis","WebAuthn"], link:"#"},
+  {name:"Fieldnotes", desc:"A CLI-first journaling tool that turns terminal history into a searchable dev diary.", tags:["Rust","CLI"], link:"#"},
+  {name:"Loom Board", desc:"A minimal kanban board with keyboard-first navigation and offline support.", tags:["TypeScript","IndexedDB"], link:"#"},
+  {name:"Signal Relay", desc:"Lightweight webhook relay and replay tool for local development.", tags:["Go","Docker"], link:"#"},
+];
+const projectGrid = document.getElementById('project-grid');
+projects.forEach(p=>{
+  projectGrid.insertAdjacentHTML('beforeend', `
+    <div class="card rounded-md p-4 flex flex-col">
+      <h3 class="font-semibold">${p.name}</h3>
+      <p class="text-sm text-[var(--text-muted)] mt-2 flex-1">${p.desc}</p>
+      <div class="flex flex-wrap gap-2 mt-3">
+        ${p.tags.map(t=>`<span class="mono text-xs px-2 py-0.5 rounded-md" style="background:var(--surface-2); border:1px solid var(--border-soft); color:var(--text-muted);">${t}</span>`).join('')}
+      </div>
+      <a href="${p.link}" class="text-sm text-[var(--link)] hover:underline mt-3 inline-block">View project →</a>
+    </div>`);
+});
+
+/* ---------- contribution graph ---------- */
+const shades = ['#161b22','var(--g0)','var(--g1)','var(--g2)','var(--g3)'];
+const monthNames = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+
+function attachTooltip(cell, count, dateStr){
+  const tooltip = document.getElementById('tooltip');
+  cell.addEventListener('mouseenter', ()=>{
+    tooltip.textContent = `${count} contribution${count===1?'':'s'} on ${dateStr}`;
+    const rect = cell.getBoundingClientRect();
+    const parentRect = cell.closest('.card').getBoundingClientRect();
+    tooltip.style.left = (rect.left - parentRect.left + rect.width/2) + 'px';
+    tooltip.style.top = (rect.top - parentRect.top) + 'px';
+    tooltip.style.opacity = '1';
+  });
+  cell.addEventListener('mouseleave', ()=> tooltip.style.opacity = '0');
+}
+
+function drawContribGrid(days){
+  // days: array of { date: 'YYYY-MM-DD', count: number, level: 0-4 } ordered oldest -> newest
+  const grid = document.getElementById('contrib-grid');
+  const monthRow = document.getElementById('month-row');
+  grid.innerHTML = '';
+  monthRow.innerHTML = '';
+
+  // pad the front so the grid starts on a Sunday, like GitHub's layout
+  const first = new Date(days[0].date);
+  const padCount = first.getDay();
+  const padded = Array(padCount).fill(null).concat(days);
+  const totalWeeks = Math.ceil(padded.length / 7);
+
+  let totalContribs = 0;
+  let lastMonthLabeled = -1;
+
+  for(let w=0; w<totalWeeks; w++){
+    let monthLabel = "";
+    for(let d=0; d<7; d++){
+      const entry = padded[w*7 + d];
+      const cell = document.createElement('div');
+      cell.className = 'day-cell';
+      if(!entry){
+        cell.style.background = '#0d1117';
+      } else {
+        const date = new Date(entry.date);
+        totalContribs += entry.count;
+        cell.style.background = shades[Math.min(entry.level, 4)];
+        const dateStr = date.toLocaleDateString('en-US',{month:'short', day:'numeric', year:'numeric', timeZone:'UTC'});
+        attachTooltip(cell, entry.count, dateStr);
+        if(d===0 && date.getUTCMonth() !== lastMonthLabeled && date.getUTCDate() <= 7){
+          monthLabel = monthNames[date.getUTCMonth()];
+          lastMonthLabeled = date.getUTCMonth();
+        }
+      }
+      grid.appendChild(cell);
+    }
+    const label = document.createElement('div');
+    label.textContent = monthLabel;
+    monthRow.appendChild(label);
+  }
+
+  document.getElementById('contrib-total').textContent = totalContribs.toLocaleString();
+}
+
+function buildMockContribGrid(){
+  // fallback only: every square filled with a shade of green
+  let seed = 7;
+  const rand = () => { seed = (seed*9301+49297)%233280; return seed/233280; };
+  const today = new Date();
+  const days = [];
+  for(let i=370; i>=0; i--){
+    const date = new Date(today);
+    date.setDate(date.getDate() - i);
+    const count = 3 + Math.floor(rand()*22);
+    const level = count > 18 ? 4 : count > 13 ? 3 : count > 8 ? 2 : 1;
+    days.push({date: date.toISOString().slice(0,10), count, level});
+  }
+  drawContribGrid(days);
+}
+
+async function loadContributions(username){
+  const note = document.getElementById('contrib-note');
+  try{
+    const res = await fetch(`https://github-contributions-api.jogruber.de/v4/${username}?y=last`);
+    if(!res.ok) throw new Error(`status ${res.status}`);
+    const data = await res.json();
+    if(!data.contributions || data.contributions.length === 0) throw new Error('no data');
+    drawContribGrid(data.contributions);
+    note.textContent = `Live data from ${username}'s public GitHub contribution calendar.`;
+  } catch(err){
+    buildMockContribGrid();
+    note.textContent = `Couldn't load live contribution data — showing sample activity instead.`;
+  }
+}
+
+loadContributions(GITHUB_USERNAME);
+</script>
+</body>
+</html>
